@@ -12,30 +12,31 @@
 <script>
 loadMarkdown("README.md", "readmeDiv", "_parent");
 
-function updateModelsHash(modelName) {
-  window.location.hash = `models=${modelName}`;
-  alert(`COMING SOON: models will be updated in the URL as #models=${modelName}`);
-}
+let selectedModels = [];
 
-function updateModel(modelName) {
-  // Uncheck all other checkboxes
-  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-  checkboxes.forEach(checkbox => {
-    if (checkbox.id !== modelName) {
-      checkbox.checked = false;
-    }
-  });
+function updateModel(modelName) {
+  const index = selectedModels.indexOf(modelName);
 
-  // Update the selected model
-  selectedModel = modelName;
-}
-
-function redirectToMainPage() {
-  if (selectedModel) {
-    window.location.href = `../#models=${selectedModel}`;
-  } else {
-    alert("Please select a model first.");
+  // If the model is not already in the list, add it; otherwise, remove it
+  if (index === -1) {
+    selectedModels.push(modelName);
+  } else {
+    selectedModels.splice(index, 1);
   }
+}
+
+// Function to handle redirection
+function redirectToMainPage() {
+  if (selectedModels.length == 7) {
+  // all seven models are chosen
+    window.location.href = `../#models=all`;
+  } else if (selectedModels.length > 0){
+    // Join selected models into a comma-separated string and redirect
+    const modelString = selectedModels.join(',');
+    window.location.href = `../#models=${modelString}`;
+  }else {
+    alert("Please select at least one model.");
+  }
 }
 
 </script>
